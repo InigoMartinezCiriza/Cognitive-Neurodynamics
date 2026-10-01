@@ -1,0 +1,64 @@
+# Partial-observables economic choice, FFNN agent
+# Saved outputs: EC_P_ffnn_<stage>.pkl, checkpoints: EC_P_ffnn_<stage>/
+name = "EC_P_ffnn"
+task = "economic_choice"
+partial = true
+seed = 1
+description = "Partial-observables economic choice, FFNN agent"
+# NOTE: the FFNN never reached the original durations in this environment (it cannot solve
+# the task, see Fig. 4b): all its stages use the shortened curriculum durations.
+
+[agent]
+layer_type = "Dense"
+actor_hidden_size = 50
+critic_hidden_size = 50
+actor_prob_connection = 0.1     # 10 % of the actor hidden-layer connections are kept
+critic_prob_connection = 1.0    # dense critic
+alpha = 0.1                     # dt / tau of the modified GRU (unused by the other layers)
+noise_std = 0.0                 # observation noise of the agent (disabled in all runs)
+learning_rate = 0.004           # actor and critic (Adam); constant for the whole run
+
+[training]
+gamma = 1.0
+l2_actor = 1e-4
+l2_critic = 1e-4
+
+[env]                           # Economic Choice task, common to all stages
+dt = 10                         # ms per step
+A_to_B_ratio = 2.2              # 1 drop of A = 2.2 drops of B
+reward_B = 1
+abort_penalty = -0.1
+reward_go_fixation = -0.01
+
+# Curriculum: duration_params = [fixation, offer_min, offer_max, decision_timeout] in ms;
+# reward_fixation = reward per step of correct fixation.
+
+[[stages]]
+episodes = 10000
+duration_params = [10, 10, 20, 20]
+reward_fixation = 0.01
+input_noise_sigma = 0.0
+
+[[stages]]
+episodes = 10000
+duration_params = [10, 10, 20, 20]
+reward_fixation = 0.01
+input_noise_sigma = 0.01
+
+[[stages]]
+episodes = 10000
+duration_params = [10, 10, 20, 20]
+reward_fixation = 0.01
+input_noise_sigma = 0.01
+
+[[stages]]
+episodes = 10000
+duration_params = [10, 10, 20, 20]
+reward_fixation = 0.01
+input_noise_sigma = 0.01
+
+[[stages]]
+episodes = 3550
+duration_params = [10, 10, 20, 20]
+reward_fixation = 0.01
+input_noise_sigma = 0.01

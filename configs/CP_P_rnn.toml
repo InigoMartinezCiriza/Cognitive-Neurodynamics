@@ -1,0 +1,38 @@
+# Partial-observables CartPole, modified (bioinspired) RNN agent
+# Saved outputs: CP_P_rnn_<stage>.pkl, checkpoints: CP_P_rnn_<stage>/
+name = "CP_P_rnn"
+task = "cartpole"
+partial = true
+seed = 1
+description = "Partial-observables CartPole, modified (bioinspired) RNN agent"
+# NOTE: this run used 100 hidden units and gamma = 0.95 (all other runs: 50 and 1.0).
+
+[agent]
+layer_type = "GRU_modified"
+actor_hidden_size = 100
+critic_hidden_size = 100
+actor_prob_connection = 0.1     # 10 % of the actor hidden-layer connections are kept
+critic_prob_connection = 1.0    # dense critic
+alpha = 0.1                     # dt / tau of the modified GRU (unused by the other layers)
+noise_std = 0.0                 # observation noise of the agent (disabled in all runs)
+learning_rate = 0.004           # actor and critic (Adam); constant for the whole run
+
+[training]
+gamma = 0.95
+l2_actor = 1e-4
+l2_critic = 1e-4
+
+[env]
+env_name = "CartPole-v1"
+
+[[stages]]
+episodes = 5000
+
+[[stages]]
+episodes = 1000
+
+[[stages]]
+episodes = 1000
+
+[[stages]]
+episodes = 1000

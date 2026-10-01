@@ -1,0 +1,13 @@
+run,task,environment,network,stages,episodes,mean_reward_last_100,first_episode_moving_avg_ge_200,moving_window
+CP_F_ffnn,CartPole,Full,FFNN,2,700,480.98,302.0,70.0
+CP_F_rnn,CartPole,Full,Modified RNN,2,700,358.82,446.0,70.0
+CP_F_rnn_std,CartPole,Full,Standard RNN,2,700,402.74,195.0,70.0
+CP_P_ffnn,CartPole,Partial,FFNN,6,8000,49.85,,800.0
+CP_P_rnn,CartPole,Partial,Modified RNN,4,8000,174.1,,800.0
+CP_P_rnn_std,CartPole,Partial,Standard RNN,2,1000,441.62,878.0,100.0
+EC_F_ffnn,Economic choice,Full,FFNN,9,12450,3.6279199999999996,,
+EC_F_rnn,Economic choice,Full,Modified RNN,9,44200,3.7198000000000007,,
+EC_F_rnn_std,Economic choice,Full,Standard RNN,9,44200,3.7884200000000003,,
+EC_P_ffnn,Economic choice,Partial,FFNN,5,43550,2.2272,,
+EC_P_rnn,Economic choice,Partial,Modified RNN,11,43550,3.5721299999999996,,
+EC_P_rnn_std,Economic choice,Partial,Standard RNN,11,48550,3.7993800000000006,,

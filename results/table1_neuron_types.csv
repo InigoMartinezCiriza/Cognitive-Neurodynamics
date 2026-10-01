@@ -1,0 +1,9 @@
+environment,Full,Full,Partial,Partial
+network,Standard RNN,Modified RNN,Standard RNN,Modified RNN
+type,,,,
+Offer A,0,2,0,1
+Offer B,14,10,18,5
+Chosen value,20,1,28,10
+Unclassified,14,5,3,0
+Inactive,2,32,1,34
+Total,50,50,50,50

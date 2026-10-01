@@ -1,0 +1,5 @@
+environment,network,group_a,n_a,median_abs_slope_a,group_b,n_b,median_abs_slope_b,U,p_value,p_value_exact
+Full,Standard RNN,Offer A,0,,Offer B,14,,,,
+Full,Modified RNN,Offer A,2,0.388057585274597,Offer B,10,0.09454968886944018,20.0,0.041258044757493055,0.030303030303030304
+Partial,Standard RNN,Offer A,0,,Offer B,18,,,,
+Partial,Modified RNN,Offer A,1,0.41519260311947587,Offer B,5,0.1039226504868012,5.0,0.24156658696897293,0.3333333333333333

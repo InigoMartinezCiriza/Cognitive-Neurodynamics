@@ -1,0 +1,11 @@
+# Text files are stored with LF line endings
+* text=auto eol=lf
+
+# Binary files: never convert
+*.png binary
+*.pdf binary
+*.eps binary
+*.npy binary
+*.index binary
+*.data-* binary
+checkpoints/**/checkpoint -text

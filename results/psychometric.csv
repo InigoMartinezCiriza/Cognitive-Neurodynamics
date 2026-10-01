@@ -1,0 +1,55 @@
+environment,network,run,stages,offer,n_B,n_A,trials,percent_B
+Full,FFNN,EC_F_ffnn,8 9,0B:1A,0,1,41,0.0
+Full,FFNN,EC_F_ffnn,8 9,1B:2A,1,2,60,6.666666666666667
+Full,FFNN,EC_F_ffnn,8 9,1B:1A,1,1,50,20.0
+Full,FFNN,EC_F_ffnn,8 9,2B:1A,2,1,54,42.592592592592595
+Full,FFNN,EC_F_ffnn,8 9,3B:1A,3,1,68,80.88235294117648
+Full,FFNN,EC_F_ffnn,8 9,4B:1A,4,1,48,87.5
+Full,FFNN,EC_F_ffnn,8 9,6B:1A,6,1,64,100.0
+Full,FFNN,EC_F_ffnn,8 9,10B:1A,10,1,44,100.0
+Full,FFNN,EC_F_ffnn,8 9,2B:0A,2,0,43,100.0
+Full,Modified RNN,EC_F_rnn,9,0B:1A,0,1,24,0.0
+Full,Modified RNN,EC_F_rnn,9,1B:2A,1,2,30,0.0
+Full,Modified RNN,EC_F_rnn,9,1B:1A,1,1,25,12.0
+Full,Modified RNN,EC_F_rnn,9,2B:1A,2,1,26,46.15384615384615
+Full,Modified RNN,EC_F_rnn,9,3B:1A,3,1,36,100.0
+Full,Modified RNN,EC_F_rnn,9,4B:1A,4,1,23,100.0
+Full,Modified RNN,EC_F_rnn,9,6B:1A,6,1,32,100.0
+Full,Modified RNN,EC_F_rnn,9,10B:1A,10,1,21,100.0
+Full,Modified RNN,EC_F_rnn,9,2B:0A,2,0,27,100.0
+Full,Standard RNN,EC_F_rnn_std,9,0B:1A,0,1,23,0.0
+Full,Standard RNN,EC_F_rnn_std,9,1B:2A,1,2,30,0.0
+Full,Standard RNN,EC_F_rnn_std,9,1B:1A,1,1,25,12.0
+Full,Standard RNN,EC_F_rnn_std,9,2B:1A,2,1,27,40.74074074074074
+Full,Standard RNN,EC_F_rnn_std,9,3B:1A,3,1,35,91.42857142857143
+Full,Standard RNN,EC_F_rnn_std,9,4B:1A,4,1,23,100.0
+Full,Standard RNN,EC_F_rnn_std,9,6B:1A,6,1,31,100.0
+Full,Standard RNN,EC_F_rnn_std,9,10B:1A,10,1,22,100.0
+Full,Standard RNN,EC_F_rnn_std,9,2B:0A,2,0,33,93.93939393939394
+Partial,FFNN,EC_P_ffnn,1 2 3 4 5,0B:1A,0,1,4148,41.32111861137898
+Partial,FFNN,EC_P_ffnn,1 2 3 4 5,1B:2A,1,2,4275,43.32163742690058
+Partial,FFNN,EC_P_ffnn,1 2 3 4 5,1B:1A,1,1,4498,47.53223654957759
+Partial,FFNN,EC_P_ffnn,1 2 3 4 5,2B:1A,2,1,4668,48.35047129391602
+Partial,FFNN,EC_P_ffnn,1 2 3 4 5,3B:1A,3,1,4733,48.42594548911895
+Partial,FFNN,EC_P_ffnn,1 2 3 4 5,4B:1A,4,1,4771,50.785998742402015
+Partial,FFNN,EC_P_ffnn,1 2 3 4 5,6B:1A,6,1,4890,49.61145194274029
+Partial,FFNN,EC_P_ffnn,1 2 3 4 5,10B:1A,10,1,4725,51.00529100529101
+Partial,FFNN,EC_P_ffnn,1 2 3 4 5,2B:0A,2,0,4630,49.35205183585313
+Partial,Modified RNN,EC_P_rnn,11,0B:1A,0,1,23,0.0
+Partial,Modified RNN,EC_P_rnn,11,1B:2A,1,2,30,0.0
+Partial,Modified RNN,EC_P_rnn,11,1B:1A,1,1,25,12.0
+Partial,Modified RNN,EC_P_rnn,11,2B:1A,2,1,26,50.0
+Partial,Modified RNN,EC_P_rnn,11,3B:1A,3,1,36,97.22222222222221
+Partial,Modified RNN,EC_P_rnn,11,4B:1A,4,1,23,100.0
+Partial,Modified RNN,EC_P_rnn,11,6B:1A,6,1,29,100.0
+Partial,Modified RNN,EC_P_rnn,11,10B:1A,10,1,14,100.0
+Partial,Modified RNN,EC_P_rnn,11,2B:0A,2,0,23,100.0
+Partial,Standard RNN,EC_P_rnn_std,11,0B:1A,0,1,23,0.0
+Partial,Standard RNN,EC_P_rnn_std,11,1B:2A,1,2,30,0.0
+Partial,Standard RNN,EC_P_rnn_std,11,1B:1A,1,1,24,8.333333333333332
+Partial,Standard RNN,EC_P_rnn_std,11,2B:1A,2,1,27,70.37037037037037
+Partial,Standard RNN,EC_P_rnn_std,11,3B:1A,3,1,35,97.14285714285714
+Partial,Standard RNN,EC_P_rnn_std,11,4B:1A,4,1,23,95.65217391304348
+Partial,Standard RNN,EC_P_rnn_std,11,6B:1A,6,1,32,100.0
+Partial,Standard RNN,EC_P_rnn_std,11,10B:1A,10,1,21,100.0
+Partial,Standard RNN,EC_P_rnn_std,11,2B:0A,2,0,33,100.0

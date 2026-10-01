@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+message: "If you use this code, please cite it as below."
+title: "Bioinspired RNN Models for Time-Dependent RL Tasks: code and data"
+type: software
+version: 1.0.0
+authors:
+  - family-names: "Martínez"
+    given-names: "Iñigo"
+    email: "imartinezc@estudiante.uam.es"
+    affiliation: "Universidad Autónoma de Madrid"
+  - family-names: "Alaíz"
+    given-names: "Carlos M."
+    email: "carlos.alaiz@uam.es"
+    affiliation: "Universidad Autónoma de Madrid"
+repository-code: "https://github.com/InigoMartinezCiriza/cognitive_neurodynamics"
+license: MIT
+keywords:
+  - recurrent neural networks
+  - reinforcement learning
+  - actor-critic
+  - bioinspired GRU
+  - cognitive tasks
