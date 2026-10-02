@@ -97,8 +97,21 @@ Table 1, number of critic units (out of 50) of each type:
 | *Unclassified* | *14* | *5* | *3* | *0* |
 | *Inactive* | *2* | *32* | *1* | *34* |
 
-Only the modified RNNs have Offer value A units, too few (two and one) for a
-statistical comparison of their slopes with those of the Offer value B units.
+Only the modified RNNs have Offer value A units. As in Padoa-Schioppa (2009),
+their absolute slopes are larger than those of the Offer value B units, and
+the two groups are completely separated, the most extreme outcome of the
+Wilcoxon rank-sum test for these sample sizes
+(`results/rank_sum_offer_A_vs_B.csv`):
+
+| Modified RNN | Offer A vs Offer B units | Exact p | Minimum attainable p |
+|---|---:|---:|---:|
+| Full | 2 vs 10 | 0.030 | 0.030 |
+| Partial | 1 vs 5 | 0.33 | 0.33 |
+| Both environments | 3 vs 15 | 0.0025 | 0.0025 |
+
+Since the tuning curves are Min–Max normalised, the slope of a linearly tuned
+unit is close to the inverse of the range of its variable (0–2 drops of A,
+0–10 drops of B), which explains the difference.
 
 CartPole (Fig. 3a): the 70-episode moving average first reaches 200 at episode
 195 (standard RNN), 302 (FFNN) and 446 (modified RNN).

@@ -96,10 +96,15 @@ def neuron_analysis(fig_dir, results_dir):
     print("\nTable 1 - number of critic units of each type:")
     print(table1.to_string())
 
-    # Wilcoxon rank-sum test, Offer A vs Offer B |slope|
-    tests = pd.DataFrame([{"environment": env, "network": net,
-                           **neurons.offer_slopes_rank_sum(a.fits)}
-                          for (env, net), a in analyses.items()])
+    # Wilcoxon rank-sum test, Offer A vs Offer B |slope|, per network and
+    # pooling both environments of the modified RNN
+    rows = [{"environment": env, "network": net, **neurons.offer_slopes_rank_sum(a.fits)}
+            for (env, net), a in analyses.items()]
+    pooled = pd.concat([a.fits for (_, net), a in analyses.items() if net == "Modified RNN"],
+                       ignore_index=True)
+    rows.append({"environment": "Both", "network": "Modified RNN",
+                 **neurons.offer_slopes_rank_sum(pooled)})
+    tests = pd.DataFrame(rows)
     tests.to_csv(results_dir / "rank_sum_offer_A_vs_B.csv", index=False, lineterminator="\n")
     print("\nWilcoxon rank-sum test, |slope| of Offer A vs Offer B units:")
     print(tests.to_string(index=False))

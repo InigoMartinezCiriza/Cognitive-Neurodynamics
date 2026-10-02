@@ -87,6 +87,8 @@ def test_exact_rank_sum_complete_separation():
     # 3 vs 7 completely separated samples: two-sided p = 2 / C(10, 3)
     p = neurons.exact_rank_sum_pvalue(np.array([5.0, 6.0, 7.0]), np.arange(7.0) - 10)
     assert p == pytest.approx(2 / 120)
+    assert neurons.min_rank_sum_pvalue(3, 7) == pytest.approx(p)
+    assert neurons.min_rank_sum_pvalue(1, 1) == 1.0
 
 
 def test_psychometric_order_and_percentages():

@@ -26,7 +26,9 @@ Padoa-Schioppa 2009):
 
 Table 1 counts the units of each type (:func:`type_counts`), and the slopes of
 the Offer A and Offer B units are compared with a Wilcoxon rank-sum test
-(:func:`offer_slopes_rank_sum`).
+(:func:`offer_slopes_rank_sum`). With few units the exact test cannot reach
+small p-values: when the two groups are completely separated, the p-value is
+the minimum attainable for their sizes (:func:`min_rank_sum_pvalue`).
 """
 
 from dataclasses import dataclass
@@ -217,24 +219,36 @@ def exact_rank_sum_pvalue(x, y):
     return float(np.mean(np.abs(sums - expected) >= observed - 1e-12))
 
 
+def min_rank_sum_pvalue(n_x, n_y):
+    """Smallest two-sided p-value of the exact rank-sum test for samples of
+    sizes ``n_x`` and ``n_y`` (without ties), reached when the two samples are
+    completely separated: ``2 / C(n_x + n_y, n_x)``."""
+    return min(1.0, 2 / comb(n_x + n_y, n_x))
+
+
 def offer_slopes_rank_sum(fits, group_a="Offer A", group_b="Offer B"):
     """Wilcoxon rank-sum test between the absolute slopes of two unit types.
 
     Each unit contributes the absolute slope of the variable it was assigned
-    to. Returns the normal approximation with continuity correction and, when
-    feasible, the exact permutation p-value.
+    to. Returns the normal approximation with continuity correction, the
+    exact permutation p-value (when feasible), the minimum p-value attainable
+    with these sample sizes and whether the two groups are completely
+    separated (every slope of one group larger than every slope of the other).
     """
     x = fits.loc[fits["type"] == group_a, f"slope_{group_a}"].abs().dropna().to_numpy()
     y = fits.loc[fits["type"] == group_b, f"slope_{group_b}"].abs().dropna().to_numpy()
     result = {"group_a": group_a, "n_a": x.size, "median_abs_slope_a": np.nan,
               "group_b": group_b, "n_b": y.size, "median_abs_slope_b": np.nan,
-              "U": np.nan, "p_value": np.nan, "p_value_exact": np.nan}
+              "separated": np.nan, "U": np.nan, "p_value": np.nan, "p_value_exact": np.nan,
+              "p_value_min": np.nan}
     if x.size and y.size:
         test = mannwhitneyu(x, y, alternative="two-sided", method="asymptotic")
         exact = (exact_rank_sum_pvalue(x, y) if comb(x.size + y.size, x.size) <= 2_000_000
                  else np.nan)
         result.update({"median_abs_slope_a": float(np.median(x)),
                        "median_abs_slope_b": float(np.median(y)),
+                       "separated": bool(x.min() > y.max() or x.max() < y.min()),
                        "U": float(test.statistic), "p_value": float(test.pvalue),
-                       "p_value_exact": exact})
+                       "p_value_exact": exact,
+                       "p_value_min": min_rank_sum_pvalue(x.size, y.size)})
     return result

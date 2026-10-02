@@ -1,5 +1,6 @@
 """The data in data/ reproduce the numbers reported in the paper."""
 
+import pandas as pd
 import pytest
 
 from bioinspired_rnn.analysis import neurons
@@ -35,6 +36,20 @@ def test_figure5_exemplars_are_of_their_type(analyses):
             exemplar = neurons.exemplar(analyses[key], variable)
             assert exemplar["unit"] == unit
             assert analyses[key].fits.loc[unit, "type"] == variable
+
+
+def test_offer_slopes_rank_sum(analyses):
+    # Section 4.2: Offer A |slopes| all above Offer B |slopes| in the modified RNNs
+    full = neurons.offer_slopes_rank_sum(analyses[("Full", "Modified RNN")].fits)
+    partial = neurons.offer_slopes_rank_sum(analyses[("Partial", "Modified RNN")].fits)
+    pooled = neurons.offer_slopes_rank_sum(pd.concat(
+        [a.fits for (_, net), a in analyses.items() if net == "Modified RNN"], ignore_index=True))
+    for result, sizes, p in ((full, (2, 10), 0.03), (partial, (1, 5), 0.33),
+                             (pooled, (3, 15), 0.002)):
+        assert (result["n_a"], result["n_b"]) == sizes
+        assert result["separated"] and result["median_abs_slope_a"] > result["median_abs_slope_b"]
+        assert result["p_value_exact"] == pytest.approx(result["p_value_min"])
+        assert round(result["p_value_exact"], 3 if p < 0.01 else 2) == p
 
 
 def test_episodes_per_run():
