@@ -12,7 +12,7 @@ authors:
     given-names: "Carlos M."
     email: "carlos.alaiz@uam.es"
     affiliation: "Universidad Autónoma de Madrid"
-repository-code: "https://github.com/InigoMartinezCiriza/cognitive_neurodynamics"
+repository-code: "https://github.com/InigoMartinezCiriza/Cognitive-Neurodynamics"
 license: MIT
 keywords:
   - recurrent neural networks
