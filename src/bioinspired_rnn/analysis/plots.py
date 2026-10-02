@@ -86,11 +86,11 @@ def representative_neurons(analyses, exemplars, variables=("Offer B", "Chosen va
     """Fig. 5: tuning of representative units.
 
     One row per variable; for each environment, the left panel shows the
-    normalised activity of the unit in each trial type against the offer (the
-    line joins the trial types, in offer order, of the offers in which both
-    juices are present), and the right panel the same values against the
-    variable, with the regression line. Circles: juice B chosen; diamonds:
-    juice A chosen.
+    normalised activity of the unit in each trial type against the offer, and
+    the right panel the same values against the variable, with the regression
+    line. Circles: juice B chosen; diamonds: juice A chosen. In the left
+    panel, a solid line joins the circles and a dashed line the diamonds, in
+    offer order, of the offers in which both juices are present.
 
     Args:
         analyses: ``{(environment, network): neurons.UnitAnalysis}``.
@@ -113,12 +113,13 @@ def representative_neurons(analyses, exemplars, variables=("Offer B", "Chosen va
                 types, y = analysis.types, analysis.tuning[unit]
                 x = types[var].to_numpy()
                 color = NEURON_COLORS[net]
-                # Trial types are ordered by offer and, within an offer, A before B
                 both_juices = ((types["n_B"] > 0) & (types["n_A"] > 0)).to_numpy()
-                ax_offer.plot(types["offer_index"][both_juices], y[both_juices], "-",
-                              color=color, alpha=0.8, zorder=2)
-                for juice, marker in (("B", "o"), ("A", "D")):
+                for juice, marker, line in (("B", "o", "-"), ("A", "D", "--")):
                     sel = (types["chosen_juice"] == juice).to_numpy()
+                    # Trial types are ordered by offer; forced choices are not joined
+                    joined = sel & both_juices
+                    ax_offer.plot(types["offer_index"][joined], y[joined], line, color=color,
+                                  alpha=0.8, linewidth=1.2, zorder=2)
                     ax_offer.plot(types["offer_index"][sel], y[sel], marker, color=color,
                                   alpha=0.85, markersize=5, linestyle="none", zorder=3)
                     ax_value.plot(x[sel], y[sel], marker, color=color, alpha=0.85,
