@@ -106,10 +106,6 @@ python scripts/evaluate.py EC_F_rnn --episodes 500
 plays 500 trials with the trained modified RNN and prints its psychometric
 table. See `checkpoints/README.md` to load an agent in Python.
 
-> **Windows:** TensorFlow cannot open checkpoints whose path contains non-ASCII
-> characters. `evaluate.py` works around it by reading a temporary copy; when
-> training, use an output directory with an ASCII-only path.
-
 ## Tests
 
 ```bash
