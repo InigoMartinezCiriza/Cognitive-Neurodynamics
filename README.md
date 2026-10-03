@@ -127,5 +127,3 @@ Iñigo Martínez (imartinezc@estudiante.uam.es) and Carlos M. Alaíz
 (carlos.alaiz@uam.es), Universidad Autónoma de Madrid.
 
 Released under the [MIT License](LICENSE).
-
-Released under the [MIT License](LICENSE).
