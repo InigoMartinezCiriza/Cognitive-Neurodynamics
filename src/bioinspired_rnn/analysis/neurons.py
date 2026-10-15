@@ -110,11 +110,14 @@ class UnitAnalysis:
         fits: One row per unit: ``slope_``, ``intercept_``, ``r2_`` and ``p_``
             of each variable, ``modulation`` (span of the raw tuning curve)
             and ``type``.
+        tuning_sd: Standard deviation over the trials of each trial type, on
+            the scale of ``tuning``, array (units, trial types).
     """
 
     types: pd.DataFrame
     tuning: np.ndarray
     fits: pd.DataFrame
+    tuning_sd: np.ndarray = None
 
 
 def _normalise(means):
@@ -159,9 +162,13 @@ def analyse_units(activity, trials, p_threshold=0.05, min_modulation=MIN_MODULAT
     """
     types = trial_types(trials, min_trials, rel_value_A)
     keys = list(zip(trials["n_B"], trials["n_A"], trials["chosen_juice"]))
-    raw = np.array([activity[[k == key for k in keys]].mean(axis=0)
-                    for key in zip(types["n_B"], types["n_A"], types["chosen_juice"])]).T
+    groups = [activity[[k == key for k in keys]]
+              for key in zip(types["n_B"], types["n_A"], types["chosen_juice"])]
+    raw = np.array([g.mean(axis=0) for g in groups]).T
     tuning = _normalise(raw)
+    span = np.ptp(raw, axis=1, keepdims=True)
+    raw_sd = np.array([g.std(axis=0, ddof=1) for g in groups]).T
+    tuning_sd = np.divide(raw_sd, span, out=np.zeros_like(raw_sd), where=~np.isclose(span, 0.0))
 
     rows = []
     for u, y in enumerate(tuning):
@@ -171,7 +178,7 @@ def analyse_units(activity, trials, p_threshold=0.05, min_modulation=MIN_MODULAT
         rows.append(row)
     fits = pd.DataFrame(rows).set_index("unit")
     fits["type"] = classify(fits, p_threshold, min_modulation)
-    return UnitAnalysis(types=types, tuning=tuning, fits=fits)
+    return UnitAnalysis(types=types, tuning=tuning, fits=fits, tuning_sd=tuning_sd)
 
 
 def type_counts(analyses):

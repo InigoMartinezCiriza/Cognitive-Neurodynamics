@@ -1,5 +1,7 @@
 # Bioinspired RNN Models for Time-Dependent RL Tasks
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23121941.svg)](https://doi.org/10.5281/zenodo.23121941)
+
 Code, data and trained agents for the article *Bioinspired RNN Models for
 Time-Dependent RL Tasks* (I. Martínez and C. M. Alaíz).
 

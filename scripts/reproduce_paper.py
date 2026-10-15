@@ -2,6 +2,8 @@
 
 Writes:
 
+* ``figures/fig1a_gru_standard.pdf``, ``figures/fig1b_gru_modified.pdf``
+* ``figures/fig2a_observables_full.pdf``, ``figures/fig2b_observables_partial.pdf``
 * ``figures/fig3a_cartpole.pdf``, ``figures/fig3b_cartpole_partial.pdf``
 * ``figures/fig4a_psychometric_full.pdf``, ``figures/fig4b_psychometric_partial.pdf``
 * ``figures/fig5_representative_neurons.pdf``
@@ -23,17 +25,14 @@ from pathlib import Path
 
 import pandas as pd
 
-from bioinspired_rnn.analysis import behaviour, neurons, plots
+from bioinspired_rnn.analysis import behaviour, neurons, plots, schematics
 from bioinspired_rnn.analysis.data import (DATA_DIR, NEURAL_RUNS, REPO_ROOT, all_configs,
                                            load_curves, load_neural, load_trials)
 from bioinspired_rnn.task import ENVIRONMENTS, NETWORKS
 
-#: Moving-average windows of Fig. 3 (episodes).
-WINDOWS = {
-    "F": {"FFNN": 70, "Modified RNN": 70, "Standard RNN": 70},
-    "P": {"FFNN": 800, "Modified RNN": 800, "Standard RNN": 100},
-}
-#: Fig. 3b: the standard RNN ran 1000 episodes and is stretched to the 8000 of the others.
+#: Moving-average window of Fig. 3, as a fraction of the episodes of each agent.
+WINDOW_FRACTION = 0.1
+#: Fig. 3b: the standard RNN ran 1000 episodes and is stretched to the 8000 of the FFNN.
 SCALE_PARTIAL = {"Standard RNN": 8}
 #: Order (and therefore colour) of the networks in Figs. 3 and 4.
 PLOT_ORDER = ["ffnn", "rnn", "rnn_std"]
@@ -43,18 +42,32 @@ LEARNT_REWARD = 200
 
 def save_figure(fig_fn, path, *args, **kwargs):
     fig = fig_fn(*args, **kwargs)
-    # No creation date, so that regenerated PDFs are byte-identical
-    fig.savefig(path.with_suffix(".pdf"), bbox_inches="tight", metadata={"CreationDate": None})
-    fig.savefig(path.with_suffix(".png"), bbox_inches="tight", dpi=200)
+    with plots.plt.rc_context(plots.PAPER_STYLE):   # embed the fonts as TrueType
+        # No creation date, so that regenerated PDFs are byte-identical
+        fig.savefig(path.with_suffix(".pdf"), bbox_inches="tight", pad_inches=0.02,
+                    metadata={"CreationDate": None})
+        fig.savefig(path.with_suffix(".png"), bbox_inches="tight", pad_inches=0.02, dpi=300)
     plots.plt.close(fig)
     print(f"  {path.with_suffix('.pdf').relative_to(REPO_ROOT)}")
+
+
+def moving_window(rewards):
+    return round(WINDOW_FRACTION * len(rewards))
+
+
+def figures1_2(fig_dir):
+    save_figure(schematics.gru_cell, fig_dir / "fig1a_gru_standard", modified=False)
+    save_figure(schematics.gru_cell, fig_dir / "fig1b_gru_modified", modified=True)
+    save_figure(schematics.observables, fig_dir / "fig2a_observables_full", partial=False)
+    save_figure(schematics.observables, fig_dir / "fig2b_observables_partial", partial=True)
 
 
 def figure3(fig_dir):
     for env, name in (("F", "fig3a_cartpole"), ("P", "fig3b_cartpole_partial")):
         rewards = {NETWORKS[net]: load_curves(f"CP_{env}_{net}")["total_reward"]
                    for net in PLOT_ORDER}
-        save_figure(plots.learning_curves, fig_dir / name, rewards, WINDOWS[env],
+        windows = {net: moving_window(r) for net, r in rewards.items()}
+        save_figure(plots.learning_curves, fig_dir / name, rewards, windows,
                     scale=SCALE_PARTIAL if env == "P" else None)
 
 
@@ -90,8 +103,9 @@ def neuron_analysis(fig_dir, results_dir):
     per_unit = per_unit[first + [c for c in per_unit.columns if c not in first]]
     per_unit.to_csv(results_dir / "neuron_classification.csv", index=False, lineterminator="\n")
 
-    # Table 1
-    table1 = neurons.type_counts(analyses)
+    # Table 1: classified units only (unclassified and inactive units are in
+    # neuron_classification.csv)
+    table1 = neurons.type_counts(analyses).loc[list(neurons.VARIABLES)]
     table1.to_csv(results_dir / "table1_neuron_types.csv", lineterminator="\n")
     print("\nTable 1 - number of critic units of each type:")
     print(table1.to_string())
@@ -133,7 +147,7 @@ def training_summary(results_dir):
                "stages": config.n_stages, "episodes": len(curves),
                "mean_reward_last_100": curves["total_reward"].tail(100).mean()}
         if task == "CP":
-            window = WINDOWS[env][NETWORKS[net]]
+            window = moving_window(curves["total_reward"])
             first = behaviour.first_episode_above(curves["total_reward"], LEARNT_REWARD, window)
             row[f"first_episode_moving_avg_ge_{LEARNT_REWARD}"] = first
             row["moving_window"] = window
@@ -156,6 +170,7 @@ def main():
 
     print(f"Reading processed data from {DATA_DIR}")
     print("Figures:")
+    figures1_2(fig_dir)
     figure3(fig_dir)
     figure4(fig_dir, results_dir)
     neuron_analysis(fig_dir, results_dir)
