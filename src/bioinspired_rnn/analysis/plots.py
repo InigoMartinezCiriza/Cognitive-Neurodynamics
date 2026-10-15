@@ -102,12 +102,16 @@ def learning_curves(rewards, windows, scale=None, filename=None):
 
     ax.set_xlabel("Episode")
     ax.set_ylabel("Total reward")
+    # Same limits in both panels, with room above 500 for the top-axis labels of Fig. 3b
+    ax.set_ylim(-20, 590)
+    ax.set_yticks(range(0, 501, 100))
     if scale:
         (factor,) = set(scale.values())
-        ax.secondary_xaxis("top", functions=(lambda x: x / factor, lambda x: x * factor))
+        top = ax.secondary_xaxis("top", functions=(lambda x: x / factor, lambda x: x * factor))
+        top.tick_params(direction="in", pad=-11)   # labels inside the box
     ax.grid(True)
-    ax.legend(loc="lower center", bbox_to_anchor=(0.5, 1.12 if scale else 1.0), ncol=3,
-              frameon=False, handlelength=2.4, columnspacing=1.2, borderaxespad=0.2)
+    ax.legend(loc="lower center", bbox_to_anchor=(0.5, 1.0), ncol=3, frameon=False,
+              handlelength=2.4, columnspacing=1.2, borderaxespad=0.2)
     fig.tight_layout()
     return _save(fig, filename)
 
